@@ -1,0 +1,80 @@
+apiVersion: "apps/v1"
+kind: StatefulSet
+metadata:
+  name: cassandra
+  namespace: database
+  labels:
+    app: cassandra
+spec:
+  serviceName: cassandra
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cassandra
+  template:
+    metadata:
+      labels:
+        app: cassandra
+    spec:
+      containers:
+        - name: cassandra
+          image: cassandra:3.11.10
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 7000
+            name: intra-node
+          - containerPort: 7001
+            name: tls-intra-node
+          - containerPort: 7199
+            name: jmx
+          - containerPort: 9042
+            name: cql
+          securityContext:
+            capabilities:
+              add:
+                - IPC_LOCK
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - nodetool drain
+          env:
+            - name: CASSANDRA_SEEDS
+              value: "cassandra-0.cassandra.database.svc.cluster.local"
+            - name: JAVA_OPTS
+              value: "$JAVA_OPTS -Xms16G -Xmx16G -server -XX:+UseG1GC -XX:+AlwaysPreTouch"
+            - name: CASSANDRA_CLUSTER_NAME
+              value: "Cassandra"
+            - name: CASSANDRA_DC
+              value: "DC1"
+            - name: CASSANDRA_RACK
+              value: "Rack1"
+            - name: CASSANDRA_ENDPOINT_SNITCH
+              value: GossipingPropertyFileSnitch
+            - name: CASSANDRA_RPC_ADDRESS
+              value: 0.0.0.0
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          volumeMounts:
+            - name: cassandra-data
+              mountPath: /var/lib/cassandra/data
+  volumeClaimTemplates:
+    - metadata:
+        name: cassandra-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-storage
+        resources:
+          requests:
+            storage: 100Gi
+#    - metadata:
+#        name: cassandra-data
+#      spec:
+#        storageClassName: rook-ceph-block
+#        resources:
+#          requests:
+#            storage: 100Gi
