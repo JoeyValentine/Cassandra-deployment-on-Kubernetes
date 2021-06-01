@@ -3,31 +3,31 @@ This tutorial shows you how to run Apache Cassandra on Kubernetes.
 
 # Creating a local StorageClass for Cassandra
 If you are using a different type of PV, you can skip this process.  
-<code>
-  kubectl apply -f ./manifests/local-storage-class.yaml
-</code>
+```
+kubectl apply -f ./manifests/local-storage-class.yaml
+```
 
 # Creating a local persistent volume for Cassandra
 If you are using a different type of PV, you can skip this process.
 In the case of local PV, it must be created for each node.  
-<code>
-  kubectl apply -f ./manifests/local-persistent-volume.yaml
-</code>
+```
+kubectl apply -f ./manifests/local-persistent-volume.yaml
+```
 
 # Creating a namespace for Cassandra
-<code>
-  kubectl create namespace database
-</code>
+```
+kubectl create namespace database
+```
 
 # Creating a service for Cassandra
-<code>
-  kubectl apply -f ./manifests/cassandra-service.yaml
-</code>
+```
+kubectl apply -f ./manifests/cassandra-service.yaml
+```
 
 # Create the Cassandra StatefulSet from the cassandra-statefulset.yaml file:
-<code>
-  kubectl apply -f ./manifests/cassandra-statefulset.yaml
-</code>
+```
+kubectl apply -f ./manifests/cassandra-statefulset.yaml
+```
 
 # How to run cassandra-stress benchmark
 
@@ -63,9 +63,9 @@ If you need more information, please refer to [this paper](https://ieeexplore.ie
 
 If you need to run cqlsh inside the pod, run the following command.
 
-<code>
-  kubectl exec -it -n database cassandra-0 -- /bin/bash
-</code>
+```
+kubectl exec -it -n database cassandra-0 -- /bin/bash
+```
 
 # Cleaning up
 
@@ -79,6 +79,6 @@ If you need to run cqlsh inside the pod, run the following command.
 ```
 
 2. Run the following command to delete the Service you set up for Cassandra:  
-<code>
-  kubectl delete service -n database -l app=cassandra
-</code>
+```
+kubectl delete service -n database -l app=cassandra
+```
