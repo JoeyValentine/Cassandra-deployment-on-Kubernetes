@@ -34,29 +34,29 @@ In the case of local PV, it must be created for each node.
 Populate the database
 ```
 cassandra-stress write n=40000000 -pop seq=1..40000000 \
--node IP_ADDR_LIST -port native=30042 jmx=30043 \
--schema "replication(strategy=NetworkTopologyStrategy, DC1=1)"
+  -node IP_ADDR_LIST -port native=30042 jmx=30043 \
+  -schema "replication(strategy=NetworkTopologyStrategy, DC1=1)"
 ```
 
 Mix-Load
 ```
 cassandra-stress mixed ratio\(write=1, read=3\) duration=30m \
--pop seq=1..40000000 -schema keyspace="keyspace1" -node IP_ADDR_LIST \
--port native=30042 jmx=30043 -rate threads=100
+  -pop seq=1..40000000 -schema keyspace="keyspace1" -node IP_ADDR_LIST \
+  -port native=30042 jmx=30043 -rate threads=100
 ```
 
 Read-Load
 ```
 cassandra-stress read duration=30m -pop seq=1..40000000 \
--schema keyspace="keyspace1" -node IP_ADDR_LIST \
--port native=30042 jmx=30043 -rate threads=100
+  -schema keyspace="keyspace1" -node IP_ADDR_LIST \
+  -port native=30042 jmx=30043 -rate threads=100
 ```
 
 Write-Load
 ```
 cassandra-stress write duration=30m -pop seq=1..40000000 \
--schema keyspace="keyspace1" -node IP_ADDR_LIST \
--port native=30042 jmx=30043 -rate threads=100
+  -schema keyspace="keyspace1" -node IP_ADDR_LIST \
+  -port native=30042 jmx=30043 -rate threads=100
 ```
 
 If you need more information, please refer to [this paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8284700&tag=1).
