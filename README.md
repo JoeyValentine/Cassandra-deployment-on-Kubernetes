@@ -70,13 +70,13 @@ If you need to run cqlsh inside the pod, run the following command.
 # Cleaning up
 
 1. Run the following commands to delete everything in the Cassandra StatefulSet:  
-<code>
+```
   grace=$(kubectl get pod cassandra-0 -o=jsonpath='{.spec.terminationGracePeriodSeconds}') \
-  && kubectl delete statefulset -n database -l app=cassandra \
-  && echo "Sleeping ${grace} seconds" 1>&2 \
-  && sleep $grace \
-  && kubectl delete persistentvolumeclaim -n database -l app=cassandra
-</code>
+    && kubectl delete statefulset -n database -l app=cassandra \
+    && echo "Sleeping ${grace} seconds" 1>&2 \
+    && sleep $grace \
+    && kubectl delete persistentvolumeclaim -n database -l app=cassandra
+```
 
 2. Run the following command to delete the Service you set up for Cassandra:  
 <code>
